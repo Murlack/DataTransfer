@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+	<SqlSettings>
+		<port>3306</port>
+		<name>root</name>
+		<password>96985</password>
+		<hostname>localhost</hostname>
+	</SqlSettings>
+	
+	<Pathfileforanalysis>
+		<fileforanalysis>C:\Users\User\Desktop\DT\testclone\Dispatcher-s-Tool\WinFormsApp1\Settings\FileForAnalysis\FileForAnalysis.xml</fileforanalysis>
+	</Pathfileforanalysis>
+	
+	<Pathdevicestatus>
+		<devicestatus>C:\Users\User\Desktop\DT\testclone\Dispatcher-s-Tool\WinFormsApp1\bin\Debug\net7.0-windows\Settings\DeviceStatus\DeviceStatus.xml</devicestatus>
+	</Pathdevicestatus>
+	
+	<Pathusersdata>
+		<usersdata>C:\Users\User\Desktop\DT\testclone\Dispatcher-s-Tool\WinFormsApp1\Settings\UsersData\UsersData.xml</usersdata>
+	</Pathusersdata>
+
+	<PathPhones>
+		<phones>C:\Users\User\Desktop\DT\testclone\Dispatcher-s-Tool\WinFormsApp1\bin\Debug\net7.0-windows\data\history\phones\</phones>
+	</PathPhones>
+
+	<Pathpowerbanks>
+		<powerbanks>C:\Users\User\Desktop\DT\testclone\Dispatcher-s-Tool\WinFormsApp1\bin\Debug\net7.0-windows\data\history\powerbanks\</powerbanks>
+	</Pathpowerbanks>
+
+	<Pathtablets>
+		<tablets>C:\Users\User\Desktop\DT\testclone\Dispatcher-s-Tool\WinFormsApp1\bin\Debug\net7.0-windows\data\history\tablets\</tablets>
+	</Pathtablets>
+	
+	<DataBaseName>
+		<database>dt</database>
+	</DataBaseName>
+	
+	<DataBasefileforanalysis>
+		<dataBasefileforanalysis>fileforanalysis</dataBasefileforanalysis>
+	</DataBasefileforanalysis>
+	
+	<DataBasedevicestatus>
+		<dataBasedevicestatus>devicestatus</dataBasedevicestatus>
+	</DataBasedevicestatus>
+	
+	<DataBaseusersdata>
+		<dataBaseusersdata>usersdata</dataBaseusersdata>
+	</DataBaseusersdata>
+	
+</Settings>
