@@ -15,6 +15,7 @@ settings = loadingDevices.loadingDevicesData(settings); // перезапись
 //settings = loadingDevicesHistory.loadingDevicesHistory(settings); // добовление данных истории устройств
 
 uploadingTheDatabase.uploadingTheDatabase(settings);
+new DataTransferinTable(settings);
 
 Console.WriteLine("Программа завершила работу");
 Console.ReadLine();
@@ -122,6 +123,82 @@ public class UploadingTheDatabase
 
     }
 }
+public class DataTransferinTable
+{
+    public DataTransferinTable(Settings settings) 
+    {
+        UploadingTheDatabase uploadingTheDatabase1 = new UploadingTheDatabase();
+
+        foreach (var str in settings.fileForAnalysis)
+        {
+            uploadingTheDatabase1.ConnectDB(settings, $"INSERT INTO {settings.dTSettingsSQL.tablefileforanalysis} (NameOfDevice) VALUES ('{str}')");
+        }
+
+        foreach (var str in settings.deviceStatuses)
+        {
+            uploadingTheDatabase1.ConnectDB(settings, $"INSERT INTO {settings.dTSettingsSQL.tabledevicestatus} (DeviceID,DeviceDescription,Comment) VALUES ('{str.DeviceID}','{str.DeviceDescription}','{str.Comment}')");
+        }
+
+        foreach (var str in settings.usersDatas)
+        {
+            uploadingTheDatabase1.ConnectDB(settings, $"INSERT INTO {settings.dTSettingsSQL.tableusersdata} (UserID,UserNames,UserDepartment) VALUES ('{str.UserID}','{str.UserNames}','{str.UserDepartment}')");
+        }
+
+        foreach (var str in settings.fileForAnalysis)
+        {
+            string path = "", p1 = "", p2 = "", p3 = "", p4 = "";
+
+            if (str[0] == 'T' && str[1] != 'A')
+                path = settings.pathFilesDevice[0] + $"{str}.xml"; //t p tab
+
+            if (str[0] == 'T' && str[1] == 'A' && str[2] == 'B')
+                path = settings.pathFilesDevice[2] + $"{str}.xml"; //t p tab
+
+            if (str[0] == 'P')
+                path = settings.pathFilesDevice[1] + $"{str}.xml"; //t p tab
+
+            Console.WriteLine(path);
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.Load(path);
+
+            XmlElement xmlElement = xmlDocument.DocumentElement;
+
+            foreach (XmlNode xmlNode in xmlElement)
+            {
+                foreach (XmlNode node in xmlNode)
+                {
+                    switch (node.Name)
+                    {
+                        case "deviceID":
+                            p1 = node.InnerText;
+
+                            if (p1 == "")
+                                p1 = str;
+                            break;
+
+                        case "userID":
+                            p2 = node.InnerText;
+                            break;
+
+                        case "sdatetimeSTR":
+                            p3 = node.InnerText;
+                            break;
+
+                        case "edatetimeSTR":
+                            p4 = node.InnerText;
+
+                            if (p1 != "" && p2 != "" && p3 != "" && p4 != "")
+                            {
+                                uploadingTheDatabase1.ConnectDB(settings,$"INSERT INTO {str} (deviceID,userID,sdatetimeSTR,edatetimeSTR) VALUES ('{p1}','{p2}','{p3}','{p4}')");
+                                p1 = "";p2 = "";p3 = "";p4 = "";
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+    }
+}
 public struct QuerysSQLGenTable
 {
     public string devicestatus;
@@ -134,8 +211,8 @@ public struct QuerysSQLGenTable
         devicestatus = $"CREATE TABLE {settings.dTSettingsSQL.tabledevicestatus} " +
         "(`idDeviceStatus` int NOT NULL AUTO_INCREMENT," +
         "`DeviceID` varchar(45) NOT NULL," +
-        "`DeviceDescription` varchar(45) NOT NULL," +
-        "`Comment` varchar(45) NOT NULL COMMENT 'Файл о состоянии устройств'," +
+        "`DeviceDescription` LONGTEXT NOT NULL," +
+        "`Comment` LONGTEXT NOT NULL COMMENT 'Файл о состоянии устройств'," +
         $"PRIMARY KEY (idDeviceStatus)" +
         ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
         fileforanalysis = $"CREATE TABLE {settings.dTSettingsSQL.tablefileforanalysis} " +
@@ -146,8 +223,8 @@ public struct QuerysSQLGenTable
         usersdata = $"CREATE TABLE {settings.dTSettingsSQL.tableusersdata} " +
         "(`idUsersData` int NOT NULL AUTO_INCREMENT," +
         "`UserID` varchar(45) NOT NULL," +
-        "`UserNames` varchar(45) NOT NULL," +
-        "`UserDepartment` varchar(45) NOT NULL," +
+        "`UserNames` LONGTEXT NOT NULL," +
+        "`UserDepartment` LONGTEXT NOT NULL," +
         $"PRIMARY KEY (idUsersData)" +
         ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
         templateCreatingTableDevices = $"DROP TABLE IF EXISTS {tableName};CREATE TABLE {tableName} " +
@@ -364,7 +441,7 @@ public class UploadingSettings
                         settings.pathFiles[2] = item.InnerText;
 
                     if (item.Name == "phones")
-                        settings.pathFilesDevice[0] = item.InnerText;
+                        settings.pathFilesDevice[0] = item.InnerText; 
 
                     if (item.Name == "powerbanks")
                         settings.pathFilesDevice[1] = item.InnerText;
