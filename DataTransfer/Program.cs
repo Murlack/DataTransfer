@@ -89,8 +89,6 @@ public class UploadingTheDatabase
     }
     public void uploadingTheDatabase(Settings settings)
     {
-        string sqlQueryInsert = "insert into dt.fileforanalysis (NameOfDevice) value ('T4')";
-
         try
         {
             // удаляем старые данные
@@ -186,12 +184,8 @@ public class DataTransferinTable
 
                         case "edatetimeSTR":
                             p4 = node.InnerText;
-
-                            if (p1 != "" && p2 != "" && p3 != "" && p4 != "")
-                            {
-                                uploadingTheDatabase1.ConnectDB(settings,$"INSERT INTO {str} (deviceID,userID,sdatetimeSTR,edatetimeSTR) VALUES ('{p1}','{p2}','{p3}','{p4}')");
-                                p1 = "";p2 = "";p3 = "";p4 = "";
-                            }
+                            uploadingTheDatabase1.ConnectDB(settings, $"INSERT INTO {str} (deviceID,userID,sdatetimeSTR,edatetimeSTR) VALUES ('{p1}','{p2}','{p3}','{p4}')");
+                            p1 = ""; p2 = ""; p3 = ""; p4 = "";
                             break;
                     }
                 }
@@ -271,7 +265,6 @@ public class LoadingDevicesHistory
                             settings.devicesDatas.Add(new Devices() { deviceID = d1 == "" ? device : d1, userID = d2, sdatetimeSTR = d3, edatetimeSTR = d4 });
                             d1 = ""; d2 = ""; d3 = ""; d4 = "";
                         }
-
                     }
                 }
             }
@@ -297,12 +290,11 @@ public class LoadingDevicesHistory
                             d3 = item1.InnerText;
 
                         if (item1.Name == "edatetimeSTR")
-                        {
+                        { 
                             d4 = item1.InnerText;
                             settings.devicesDatas.Add(new Devices() { deviceID = d1 == "" ? device : d1, userID = d2, sdatetimeSTR = d3, edatetimeSTR = d4 });
                             d1 = ""; d2 = ""; d3 = ""; d4 = "";
                         }
-
                     }
                 }
             }
@@ -333,7 +325,7 @@ public class LoadingDevicesHistory
                             settings.devicesDatas.Add(new Devices() { deviceID = d1 == "" ? device : d1, userID = d2, sdatetimeSTR = d3, edatetimeSTR = d4 });
                             d1 = ""; d2 = ""; d3 = ""; d4 = "";
                         }
-
+                        
                     }
                 }
             }
